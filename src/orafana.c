@@ -56,7 +56,7 @@ void CUSEREXIT(exit_call_type_def exit_call_type,
         }
         else
         {
-            info("Python interpreter inintialized succecfully");
+            info("Python interpreter initialized successfully");
             info("Prefix: %s\nExec Prefix: %s\nPython Path: %s\n" , Py_GetPrefix() , Py_GetExecPrefix() , Py_GetProgramFullPath());
             info("Module Path: %s\nVersion: %s\nPlatform: %s\n" , Py_GetPath() , Py_GetVersion() , Py_GetPlatform());
             info("Copyright:: %s\nCompiler String: %s\nBuild Info: %s\n" , Py_GetCopyright() , Py_GetCompiler() , Py_GetBuildInfo());
