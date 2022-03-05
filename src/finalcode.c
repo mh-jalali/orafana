@@ -13,7 +13,7 @@ int main(int argc , char *argv[])
 
 	Py_Initialize();
 
-	PySys_SetPath("/tmp/test");
+	PySys_SetPath("/home/mh-jalali/Oracle/orafana/src");
 
 	pName = PyString_FromString(argv[1]);
 
