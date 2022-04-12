@@ -1,128 +1,83 @@
 #!/bin/bash
 
+function getCommand {
+    local primary=$1; shift
+    local alternate=$*
+    for check in ${alternate} ${primary}; do
+        command=$(command -v ${check} 2>/dev/null) && break
+    done
+    [[ -z "${command}" ]] && {
+        [[ ! -z "${alternate}" ]] && echo "Error: Cannot locate command ${primary} or ${alternate}" \
+                                  || echo "Error: Cannot locate command ${primary}"
+        exit 1
+    }
+    eval "${primary^^}=${command}"
+}
+
+getCommand runuser
+runAsUser="${RUNUSER} -u oracle --"
+OGGProcesses="(extract|ggsci|mgr)"
+
+function tailReport {
+    getCommand tail
+    local rptFile="$1"
+    while [[ ! -f  "${rptFile}" ]]; do
+        sleep 1
+    done
+    ${TAIL} --lines=+1 -F ${rptFile}
+}
+
+function setExecutable {
+    getCommand find
+    ${FIND} ${OGG_HOME} -type f \( -name '*.so*' -o -not -name '*.*' \) -exec chmod +x {} \;
+}
+
+
+function isOGGRunning {
+    getCommand pgrep
+    ${PGREP} -f ${OGGProcesses} &>/dev/null
+}
+
 function createSubdirs {
     echo "CREATE SUBDIRS" | ${runAsUser} ${OGG_HOME}/ggsci
 }
 
-function startManager {
-    echo "START MGR" | ${runAsUser} ${OGG_HOME}/ggsci
-}
-
-function isOGGRunning {
-
-}
-
-
-
-function startCapture {
-    echo "START EXTRACT EORA" | ${runAsUser} ${OGG_HOME}/ggsci
-}
-
-function alterCapture {
-    echo "ALTER EXTRACT EORA , SCN ${SCN_NO}" | ${runAsUser} ${OGG_HOME}/ggsci
-}
-
-function checkRegister {
-
-}
-
-function registerCapture {
-    loginOGG;
-    echo "REGISTER EXTRACT EORA DATABASE CONTAINER (SHATOOTPDB)" | ${runAsUser} ${OGG_HOME}/ggsci
-}
-
-function unregisterCapture {
-    loginOGG;
-    echo "UNREGISTER EXTRACT EORA DATABASE" | ${runAsUser} ${OGG_HOME}/ggsci
-}
-
-function loginOGG {
-    echo "DBLOGIN USERIDALIAS OGGADMIN" | ${runAsUser} ${OGG_HOME}/ggsci
-}
-
-function createCredentialStore {
-    echo "CREATE CREDENTIALSTORE" | ${runAsUser} ${OGG_HOME}/ggsci
-    echo "ALTER CREDENTIALSOTRE ADD USER OGGADMIN@SHATOOTPDB" | ${runAsUser} ${OGG_HOME}/ggsci
-    #PASSWORD PROMPT
-}
-
-function createCapture {
-    if [!checkRegister]; then
-        loginOGG;
-        registerCapture;
-        if [!hasCheckpoint]; then
-            echo "ADD EXTRACT EORA , TRANLOG INTEGRATED , BEGIN NOW" | ${runAsUser} ${OGG_HOME}/ggsci
-            echo "ADD EXTTRAIL ./dirdat/e1 , EXTRACT EORA , MEGABYTES 500" | ${runAsUser} ${OGG_HOME}/ggsci
-        else
-            readCheckpoint;
-            echo "ADD EXTRACT EORA , TRANLOG INTEGRATED" | ${runAsUser} ${OGG_HOME}/ggsci
-            alterCapture(${SCN_NO});
-        fi
+function createGlobals {
+    if [[ ! -f ${OGG_HOME}/GLOBALS ]]; then
+        ${runAsUser} bash -c "echo GGSCHEMA C##OGGADMIN > ${OGG_HOME}/GLOBALS"
     else
-        loginOGG;
-        echo "ADD EXTRACT EORA , TRANLOG INTEGRATED , BEGIN NOW" | ${runAsUser} ${OGG_HOME}/ggsci
-        echo "ADD EXTTRAIL ./dirdat/e1 , EXTRACT EORA , MEGABYTES 500" | ${runAsUser} ${OGG_HOME}/ggsci
+        return 0
     fi
 }
 
-function hasCheckpoint {
-
+function initShell {
+    if (! grep OGG_ETC_HOME "/home/oracle/.bash_profile" 2>/dev/null ); then
+        cat<<EOF | ${runAsUser} bash -c 'cat >> /home/oracle/.bash_profile'
+export OGG_HOME="${OGG_HOME}"
+export ORACLE_HOME="${ORACLE_HOME}"
+export ORACLE_SID="${ORACLE_SID}"
+export TNS_ADMIN="${ORACLE_HOME}/network/admin"
+export ORA_INVENTORY="${ORA_INVENTORY}"
+export LD_LIBRARY_PATH="/usr/lib/jvm/jre/lib/amd64/server:${LD_LIBRARY_PATH}"
+export PYTHONHOME="${OGG_HOME}/dirprm"
+EOF
+    fi
 }
 
-function readCheckpoint {
-
+function startManager {
+    local rptFile="${OGG_HOME}/dirrpt/MGR.rpt"
+    local prmFile="${OGG_HOME}/dirprm/MGR.prm"
+    ${runAsUser}   ${OGG_HOME}/mgr PARAMFILE ${prmFile} REPORTFILE ${rptFile} &>/dev/null &
+    tailReport     ${rptFile}
 }
 
-function installOGG {
-    ${runAsUser} ./runInstaller -silent -showProgress -waitForCompletion \
-                    INSTALL_OPTION=ORA19c \
-                    SOFTWARE_LOCATION=${OGG_HOME} \
-                    START_MANAGER=FALSE \
-                    MANAGER_PORT=7809 \
-                    DATABASE_LOCATION=${ORACLE_HOME} \
-                    INVENTORY_LOCATION=${ORA_INVENTORY} \
-                    UNIX_GROUP_NAME=oinstall 2>/dev/null
+function terminateGoldengate {
+    echo -e "\nTerminating..."
+    echo "Stop ER * !" | ${runAsUser} ${OGG_HOME}/ggsci
+    sleep 5
+    echo "Stop MGR  !" | ${runAsUser} ${OGG_HOME}/ggsci
+    sleep 5
+    exit 1
 }
 
-
-function getVersion {
-
-}
-
-USER oracle
-##Copy Software
-
-##Unzip
-RUN cd /opt/tmp && unzip 191004_fbo_ggs_Linux_x64_shiphome.zip
-RUN unzip -d $ORACLE_HOME /opt/tmp/instantclient-basiclite-linux.x64-21.1.0.0.0.zip
-##Create Goldengate Subdirs
-
-WORKDIR /opt/tmp/fbo_ggs_Linux_x64_shiphome/Disk1
-RUN ./runInstaller -silent -showProgress -waitForCompletion \
-		 INSTALL_OPTION=ORA19c \
-		 SOFTWARE_LOCATION=${OGG_HOME} \
-		 START_MANAGER=FALSE \
-		 MANAGER_PORT=7809 \
-		 DATABASE_LOCATION=${ORACLE_HOME} \
-		 INVENTORY_LOCATION=${ORA_INVENTORY} \
-		 UNIX_GROUP_NAME=oinstall 
-RUN mkdir -p $OGG_HOME/
-RUN mkdir -p $OGG_HOME/dirprm
-RUN mkdir -p $OGG_HOME/dirdat
-RUN mkdir -p $OGG_HOME/dirchk
-RUN mkdir -p $OGG_HOME/dirrpt
-USER root
-RUN $ORA_INVENTORY/orainstRoot.sh
-USER oracle
-WORKDIR $OGG_HOME
-CMD ["ggsci","CREATE SUBDIRS"]
-#CMD ["ggsci","ADD CREDENTIALSTORE"]
-#CMD ["ggsci","ALTER CREDENTIALSTORE ADD USER C##OGGADMIN@SHATOOT ALIAS OGGADMIN"]
-#TODO: after above command ggsci wait for password
-CMD ["ggsci","DBLOGIN USERIDALIAS OGGADMIN"]
-CMD ["ggsci","REGISTER EXTRACT EORA DATABASE CONTAINER (SHATOOTPDB)"]
-CMD ["ggsci","ADD EXTRACT EORA , TRANLOG INTEGRATED , BEGIN NOW"]
-CMD ["ggsci","ADD EXTTRAIL ./didat/e1 EXTRACT EORA"]
-##CMD ["ggsci","START EORA"]
-#Cleanup
-RUN rm -rf /opt/tmp
+trap 
