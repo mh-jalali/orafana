@@ -136,7 +136,6 @@ void CUSEREXIT(exit_call_type_def exit_call_type,
             info("\nPython interpreter initialized successfully . (EXIT_CALL_BEGIN_TRANS)\n");
             //return 0;
         }
-        elsePURGEOLDEXTRACTS /ggs/dirdat/AA*, USECHECKPOINTS
         else
         {
             info("\nUnable to initialize Python interpreter. (EXIT_CALL_END_TRANS)\n");
@@ -153,7 +152,7 @@ void CUSEREXIT(exit_call_type_def exit_call_type,
 
         info("Reversed string from python call inside (EXIT_CALL_PROCESS_RECORD) : %s\n",cstrret);
 
-        *exit_call_result = EXIT_IGNORE_VAL;
+        *exit_call_result = EXIT_PROCESSED_REC_VAL;
         return;
         break;
     case EXIT_CALL_CHECKPOINT:
