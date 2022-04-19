@@ -1,1 +1,55 @@
-<mxfile host="app.diagrams.net" modified="2022-04-19T18:56:15.135Z" agent="5.0 (X11)" version="17.4.5" etag="EPVHB46jAv-GkjJjiSpp" type="github"><diagram id="t0Vwic5Q1c-dFA1jJVym">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2022-04-19T19:07:06.536Z" agent="5.0 (X11)" etag="lzs60CJ5ZnfqyAvYvKMU" version="17.4.5" type="github">
+  <diagram id="t0Vwic5Q1c-dFA1jJVym" name="Page-1">
+    <mxGraphModel dx="677" dy="360" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-1" value="&lt;div&gt;Oracle Golden Gate Custom User Exit&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="280" y="10" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4gwZtn-bghZZy5ArMLbV-2" target="4gwZtn-bghZZy5ArMLbV-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-5" value="&lt;div&gt;Captures&lt;/div&gt;&lt;div&gt;Data&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="4gwZtn-bghZZy5ArMLbV-4">
+          <mxGeometry x="-0.3543" y="-2" relative="1" as="geometry">
+            <mxPoint x="14" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-2" value="&lt;div&gt;Oracle Database&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=datastore;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="110" width="60" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4gwZtn-bghZZy5ArMLbV-3" target="4gwZtn-bghZZy5ArMLbV-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-12" value="Sends Data" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="4gwZtn-bghZZy5ArMLbV-10">
+          <mxGeometry x="-0.105" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-3" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Extract&lt;/div&gt;&lt;div&gt;&amp;nbsp;Process&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="290" y="135" width="90" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-7" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn2.iconfinder.com/data/icons/boxicons-logos/24/bxl-python-128.png" vertex="1" parent="1">
+          <mxGeometry x="474.5" y="280" width="85" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4gwZtn-bghZZy5ArMLbV-9" target="4gwZtn-bghZZy5ArMLbV-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-18" value="Registers Events (ASYNC)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="4gwZtn-bghZZy5ArMLbV-13">
+          <mxGeometry x="-0.136" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-9" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/hawcons/32/699165-icon-88-document-file-c-128.png" vertex="1" parent="1">
+          <mxGeometry x="480" y="123" width="74" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-15" value="Custom C User Exit" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="487" y="93" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="4gwZtn-bghZZy5ArMLbV-17" value="Python Event Listener" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="554" y="307.5" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
